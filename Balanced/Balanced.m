@@ -7,8 +7,9 @@
 
 #import "Balanced.h"
 #import "BPUtilities.h"
+#import "BPHTTPClient.h"
 
-#define API_URL @"https://js.balancedpayments.com"
+#define API_URL @"https://api.balancedpayments.com"
 
 @interface Balanced()
 @property (nonatomic, strong) NSString *marketplaceURI;
@@ -26,7 +27,9 @@
 
 - (void) tokenizeCard:(BPCard *)card onSuccess:(BalancedTokenizeResponseBlock)successBlock onError:(BalancedErrorBlock)errorBlock
 {
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@/cards", API_URL, self.marketplaceURI]];
+    NSString *urlString = [NSString stringWithFormat:@"%@/cards", [[BPHTTPClient sharedClient]marketplaceURI]];
+    NSLog(@"urlString %@", urlString);
+    NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     __block NSURLResponse *response;
     NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -37,6 +40,11 @@
     [request setAllHTTPHeaderFields:headers];
     
     NSDictionary *params = @{
+                            @"name":[card.optionalFields objectForKey:BPCardOptionalParamNameKey],
+                            @"phone_number":[card.optionalFields objectForKey:BPCardOptionalParamPhoneNumberKey],
+                            @"city":[card.optionalFields objectForKey:BPCardOptionalParamCityKey],
+                            @"state":[card.optionalFields objectForKey:BPCardOptionalParamStateKey],
+                            @"email_address": @"win.raguini@gmail.com",
                             @"card_number":card.number,
                             @"expiration_month":[NSString stringWithFormat:@"%i",card.expirationMonth],
                             @"expiration_year":[NSString stringWithFormat:@"%i",card.expirationYear],

@@ -16,6 +16,11 @@ __unused static NSString const *BPCardOptionalParamCountryCodeKey = @"country_co
 __unused static NSString const *BPCardOptionalParamMetaKey = @"meta";
 __unused static NSString const *BPCardOptionalParamStateKey = @"state";
 
+__unused static NSString const *BPMetaShippingStreetAddress = @"shipping.address.street_address";
+__unused static NSString const *BPMetaShippingCity = @"shipping.address.city";
+__unused static NSString const *BPMetaShippingRegion = @"shipping.address.region";
+
+
 typedef NS_ENUM(NSUInteger, BPCardType)
 {
     BPCardTypeUnknown,
