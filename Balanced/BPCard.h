@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, BPCardType)
     BPCardTypeDiscover
 };
 
-@interface BPCard : NSObject
+@interface BPCard : NSObject <NSCoding>
 
 - (id)initWithNumber:(NSString *)cardNumber
  expirationMonth:(NSUInteger)expirationMonth
@@ -43,6 +43,8 @@ typedef NS_ENUM(NSUInteger, BPCardType)
     securityCode:(NSString *)securityCode
   optionalFields:(NSDictionary *)optionalFields;
 
+- (id)initWithURI:(NSString*)uri lastFourDigits:(NSString*)lastFourDigits expirationMonth:(NSUInteger)expirationMonth expirationYear:(NSUInteger)expirationYear;
+
 @property (nonatomic, assign, readonly, getter=getType) BPCardType type;
 @property (nonatomic, assign, readonly, getter=getValid) BOOL valid;
 @property (nonatomic, assign, readonly, getter=getNumberValid) BOOL numberValid;
@@ -50,9 +52,13 @@ typedef NS_ENUM(NSUInteger, BPCardType)
 @property (nonatomic, assign, readonly, getter=getExpired) BOOL expired;
 @property (nonatomic, assign) NSUInteger expirationMonth;
 @property (nonatomic, assign) NSUInteger expirationYear;
+//This does not actually get stored so as not to be under PCI-DSS scrutiny https://www.pcisecuritystandards.org/documents/pci_dss_v2.pdf
 @property (nonatomic, strong) NSString *number;
+@property (nonatomic, strong) NSString *lastFourDigits;
+@property (nonatomic, strong, readonly) NSString *expiration;
 @property (nonatomic, strong) NSDictionary *optionalFields;
 @property (nonatomic, strong) NSString *securityCode;
+@property (nonatomic, strong) NSString *URI;
 @property (nonatomic, strong) NSMutableArray *errors;
 
 @end

@@ -27,7 +27,7 @@
 
 - (void) tokenizeCard:(BPCard *)card onSuccess:(BalancedTokenizeResponseBlock)successBlock onError:(BalancedErrorBlock)errorBlock
 {
-    NSString *urlString = [NSString stringWithFormat:@"%@/cards", [[BPHTTPClient sharedClient]marketplaceURI]];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@/cards",[[BPHTTPClient sharedClient] baseURI] ,[[BPHTTPClient sharedClient]marketplaceURI]];
     NSLog(@"urlString %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];

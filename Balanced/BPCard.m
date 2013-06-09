@@ -7,6 +7,16 @@
 
 #import "BPCard.h"
 
+#define kURIKey @"kURIKey"
+#define kLastFourDigitsKey @"kLastFourDigitsKey"
+#define kSecurityCodeKey @"kSecurityCodeKey"
+#define kExpirationMonthKey @"kExpirationMonthKey"
+#define kExpirationYearKey @"kExpirationYearKey"
+
+@interface BPCard ()
+@property (nonatomic, readwrite) NSString *expiration;
+@end
+
 @implementation BPCard
 @synthesize errors;
 
@@ -30,6 +40,45 @@
         self.errors = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_URI forKey:kURIKey];
+    [aCoder encodeObject:_lastFourDigits forKey:kLastFourDigitsKey];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_expirationMonth] forKey:kExpirationMonthKey];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_expirationYear] forKey:kExpirationYearKey];
+}
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    NSString *uri = [decoder decodeObjectForKey:kURIKey];
+    NSString *lastFourDigits = [decoder decodeObjectForKey:kLastFourDigitsKey];
+    NSUInteger expirationMonth = [decoder decodeIntegerForKey:kExpirationMonthKey];
+    NSUInteger expirationYear = [decoder decodeIntegerForKey:kExpirationYearKey];
+    return [self initWithURI:uri lastFourDigits:lastFourDigits expirationMonth:expirationMonth expirationYear:expirationYear];
+}
+
+
+- (id)initWithURI:(NSString*)uri lastFourDigits:(NSString*)lastFourDigits expirationMonth:(NSUInteger)expirationMonth expirationYear:(NSUInteger)expirationYear
+{
+    if (self = [super init]) {
+        _URI = uri;
+        _lastFourDigits = lastFourDigits;
+        _expirationMonth = expirationMonth;
+        _expirationYear = expirationYear;
+    }
+    return self;
+}
+
+- (NSString*)expiration
+{
+    return [NSString stringWithFormat:@"%02d/%02d",_expirationMonth,_expirationYear];
+}
+
+- (BOOL)isEqualToCard:(BPCard*)card
+{
+    
+    return YES;
 }
 
 - (BOOL)getNumberValid {
