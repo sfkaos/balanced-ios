@@ -45,6 +45,8 @@ typedef NS_ENUM(NSUInteger, BPCardType)
 
 - (id)initWithURI:(NSString*)uri lastFourDigits:(NSString*)lastFourDigits expirationMonth:(NSUInteger)expirationMonth expirationYear:(NSUInteger)expirationYear;
 
+- (BOOL)isEqualToCardNumber:(NSString*)cardNumber expMonth:(int)month expYear:(int)year;
+
 @property (nonatomic, assign, readonly, getter=getType) BPCardType type;
 @property (nonatomic, assign, readonly, getter=getValid) BOOL valid;
 @property (nonatomic, assign, readonly, getter=getNumberValid) BOOL numberValid;

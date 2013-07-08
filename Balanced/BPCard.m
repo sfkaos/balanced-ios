@@ -46,14 +46,14 @@
 {
     [aCoder encodeObject:_URI forKey:kURIKey];
     [aCoder encodeObject:_lastFourDigits forKey:kLastFourDigitsKey];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_expirationMonth] forKey:kExpirationMonthKey];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_expirationYear] forKey:kExpirationYearKey];
+    [aCoder encodeInteger:_expirationMonth forKey:kExpirationMonthKey];
+    [aCoder encodeInteger:_expirationYear forKey:kExpirationYearKey];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
     NSString *uri = [decoder decodeObjectForKey:kURIKey];
     NSString *lastFourDigits = [decoder decodeObjectForKey:kLastFourDigitsKey];
-    NSUInteger expirationMonth = [decoder decodeIntegerForKey:kExpirationMonthKey];
+    NSUInteger *expirationMonth = [decoder decodeIntegerForKey:kExpirationMonthKey];
     NSUInteger expirationYear = [decoder decodeIntegerForKey:kExpirationYearKey];
     return [self initWithURI:uri lastFourDigits:lastFourDigits expirationMonth:expirationMonth expirationYear:expirationYear];
 }
@@ -70,9 +70,26 @@
     return self;
 }
 
+- (NSString*)description
+{
+    return [NSString stringWithFormat:@"URI: %@, lastFourDigits:%@ expMonth:%d expYear:%d", self.URI, self.lastFourDigits, self.expirationMonth, self.expirationYear];
+}
+
 - (NSString*)expiration
 {
     return [NSString stringWithFormat:@"%02d/%02d",_expirationMonth,_expirationYear];
+}
+
+- (BOOL)isEqualToCardNumber:(NSString*)cardNumber expMonth:(int)month expYear:(int)year
+{
+    NSString *compareNumber = cardNumber;
+    if ([cardNumber length] > 4) {
+        NSRange theRange;
+        theRange.location = [cardNumber length]  - 4;
+        theRange.length = 4;
+        compareNumber = [cardNumber substringWithRange:theRange];
+    }
+    return ([self.lastFourDigits isEqualToString:compareNumber] && self.expirationMonth == month && self.expirationYear == year);
 }
 
 - (BOOL)isEqualToCard:(BPCard*)card

@@ -68,7 +68,7 @@
         valid = false;
     }
     if (self.errors.count > 0) {
-        NSLog(@"%@", errors);
+        //NSLog(@"%@", errors);
     }
     
     return valid;

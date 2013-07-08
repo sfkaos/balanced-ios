@@ -28,7 +28,7 @@
 - (void) tokenizeCard:(BPCard *)card onSuccess:(BalancedTokenizeResponseBlock)successBlock onError:(BalancedErrorBlock)errorBlock
 {
     NSString *urlString = [NSString stringWithFormat:@"%@%@/cards",[[BPHTTPClient sharedClient] baseURI] ,[[BPHTTPClient sharedClient]marketplaceURI]];
-    NSLog(@"urlString %@", urlString);
+    //NSLog(@"urlString %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     __block NSURLResponse *response;
@@ -44,7 +44,6 @@
                             @"phone_number":[card.optionalFields objectForKey:BPCardOptionalParamPhoneNumberKey],
                             @"city":[card.optionalFields objectForKey:BPCardOptionalParamCityKey],
                             @"state":[card.optionalFields objectForKey:BPCardOptionalParamStateKey],
-                            @"email_address": @"win.raguini@gmail.com",
                             @"card_number":card.number,
                             @"expiration_month":[NSString stringWithFormat:@"%i",card.expirationMonth],
                             @"expiration_year":[NSString stringWithFormat:@"%i",card.expirationYear],
